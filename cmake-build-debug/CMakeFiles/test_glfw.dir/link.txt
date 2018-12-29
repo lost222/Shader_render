@@ -1,3 +1,0 @@
-"D:\jetbrains\CLion 2018.2.6\bin\cmake\win\bin\cmake.exe" -E remove -f CMakeFiles\test_glfw.dir/objects.a
-D:\MinGW\bin\ar.exe cr CMakeFiles\test_glfw.dir/objects.a @CMakeFiles\test_glfw.dir\objects1.rsp
-D:\MinGW\bin\g++.exe -g   -Wl,--whole-archive CMakeFiles\test_glfw.dir/objects.a -Wl,--no-whole-archive  -o test_glfw.exe -Wl,--out-implib,libtest_glfw.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\test_glfw.dir\linklibs.rsp

@@ -1,3 +1,0 @@
-D:/lion_ide/test_glfw/cmake-build-debug/CMakeFiles/test_glfw.dir
-D:/lion_ide/test_glfw/cmake-build-debug/CMakeFiles/edit_cache.dir
-D:/lion_ide/test_glfw/cmake-build-debug/CMakeFiles/rebuild_cache.dir

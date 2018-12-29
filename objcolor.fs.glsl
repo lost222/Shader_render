@@ -32,8 +32,8 @@ void main()
 //  这里教程的方式是 :
 //    我觉得 核心是 norm 已经是镜面的法向了
     vec3 reflectDir = reflect(-lightDir, norm);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 256);
-    // n = 32
+    // n = 1024
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 1024);
     vec3 specular = specularStrength * spec * lightColor;
 
     vec3 result = (ambient + diffuse + specular) * objectColor;
