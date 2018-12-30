@@ -11,14 +11,17 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
 
+
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow *window);
 
+
 // settings
-const unsigned int SCR_WIDTH = 1200;
-const unsigned int SCR_HEIGHT = 800;
+const unsigned int SCR_WIDTH = 800;
+const unsigned int SCR_HEIGHT = 600;
 
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -31,7 +34,7 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
 // lighting
-glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+glm::vec3 lightPos(1.2f, 2.0f, 2.0f);
 
 int main()
 {
@@ -77,13 +80,12 @@ int main()
 
     // build and compile our shader zprogram
     // ------------------------------------
-    std::string objvsPath = "D:\\lion_ide\\test_glfw\\objcolor.vs.glsl";
-    std::string objfsPath = "D:\\lion_ide\\test_glfw\\objcolor.fs.glsl";
+    std::string lightvsPath = "D:\\lion_ide\\test_glfw\\maLightShader.vs.glsl";
+    std::string lightfsPath  = "D:\\lion_ide\\test_glfw\\maLightShader.fs.glsl";
+    Shader lightingShader(lightvsPath.c_str(), lightfsPath.c_str());
     std::string lampvsPath = "D:\\lion_ide\\test_glfw\\lamb.vs.glsl";
     std::string lampfsPath = "D:\\lion_ide\\test_glfw\\lamb.fs.glsl";
-
-    Shader lightingShader(objvsPath.c_str(), objfsPath.c_str());
-    Shader lampShader(lampvsPath.c_str(), lampfsPath.c_str());
+    Shader lampShader(lampvsPath.c_str(),  lampfsPath.c_str());
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
@@ -143,24 +145,20 @@ int main()
     // position attribute
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
-
-    // 写入法向量
     // normal attribute
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+
 
     // second, configure the light's VAO (VBO stays the same; the vertices are the same for the light object which is also a 3D cube)
     unsigned int lightVAO;
     glGenVertexArrays(1, &lightVAO);
     glBindVertexArray(lightVAO);
 
-    // we only need to bind to the VBO (to link it with glVertexAttribPointer), no need to fill it; the VBO's data already contains all we need (it's already bound, but we do it again for educational purposes)
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
+    // note that we update the lamp's position attribute's stride to reflect the updated buffer data
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
-
-
 
 
     // render loop
@@ -184,8 +182,31 @@ int main()
 
         // be sure to activate shader when setting uniforms/drawing objects
         lightingShader.use();
-        lightingShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
-        lightingShader.setVec3("lightColor",  1.0f, 1.0f, 1.0f);
+        lightingShader.setVec3("light.position", lightPos);
+        lightingShader.setVec3("viewPos", camera.Position);
+
+
+//        lightPos.x = 1.0f + sin(glfwGetTime()) * 2.0f;
+//        lightPos.y = sin(glfwGetTime() / 2.0f) * 1.0f;
+
+        // light properties
+        glm::vec3 lightColor;
+//        lightColor.x = sin(glfwGetTime() * 2.0f);
+//        lightColor.y = sin(glfwGetTime() * 0.7f);
+//        lightColor.z = sin(glfwGetTime() * 1.3f);
+        lightColor = glm::vec3(1.0f);
+        glm::vec3 diffuseColor = lightColor   * glm::vec3(1.0f); // decrease the influence
+        glm::vec3 ambientColor = diffuseColor * glm::vec3(1.0f); // low influence
+        lightingShader.setVec3("light.ambient", ambientColor);
+        lightingShader.setVec3("light.diffuse", diffuseColor);
+        lightingShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+
+        // material properties
+
+        lightingShader.setVec3("material.ambient", 0.0 ,	0.05 ,	0.05);
+        lightingShader.setVec3("material.diffuse", 0.4,	0.5,	0.5);
+        lightingShader.setVec3("material.specular", 0.04,	0.7,	0.7); // specular lighting doesn't have full effect on this object's material
+        lightingShader.setFloat("material.shininess", .078125f);
 
         // view/projection transformations
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
@@ -193,16 +214,10 @@ int main()
         lightingShader.setMat4("projection", projection);
         lightingShader.setMat4("view", view);
 
-
-        lightPos.x = 1.0f + sin(glfwGetTime()) * 1.5f;
-        lightPos.y = sin(glfwGetTime() / 2.0f) * 1.0f;
         // world transformation
-        glm::mat4 model = glm::mat4();
-        model = glm::rotate(model, glm::radians(35.0f), glm::vec3(0.1f, 0.3f, 0.1f));
-//        model = glm::perspective(glm::radians(45.0f), (float)0.3/(float)0.2, 0.1f, 100.0f);
+        glm::mat4 model;
+        model = glm::rotate(model, 0.45f, glm::vec3(1.0f, 0.5f, 0.7f));
         lightingShader.setMat4("model", model);
-        lightingShader.setVec3("lightPos", lightPos);
-        lightingShader.setVec3("viewPos", camera.Position);
 
         // render the cube
         glBindVertexArray(cubeVAO);
@@ -211,15 +226,13 @@ int main()
 
         // also draw the lamp object
         lampShader.use();
-        lampShader.setVec3("lightColor",  1.0f, 1.0f, 1.0f);
         lampShader.setMat4("projection", projection);
         lampShader.setMat4("view", view);
         model = glm::mat4();
         model = glm::translate(model, lightPos);
         model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
         lampShader.setMat4("model", model);
-
-
+        lampShader.setVec3("lightColor", lightColor);
         glBindVertexArray(lightVAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
@@ -295,3 +308,4 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
     camera.ProcessMouseScroll(yoffset);
 }
+
