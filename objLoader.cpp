@@ -71,7 +71,7 @@ std::vector<std::vector<float> > split2triangle (std::vector<std::vector<float> 
     std::vector<float> pointFirst = polygon[0];
     // 加速 : 一个面应该只有一个法向量
     polygon.erase(polygon.begin());
-    while (polygon.size() > 2) {
+    while (polygon.size() > 1) {
         std::vector<float> point1 = pointFirst;
         std::vector<float> point2 = polygon.back();
         polygon.pop_back();
@@ -129,6 +129,21 @@ std::vector<float> sub(const std::vector<float>& x, const std::vector<float>& y)
 
 
 void Group::draw(Shader useshader) {
+    if(!if_mesh) {
+        init_mesh();
+    }
+    for(auto &mesh : MeshsVec) {
+        mesh.Draw(useshader);
+    }
+}
+
+void objLoader::Draw(Shader useone) {
+    for (auto &i : groups) {
+        i.draw(useone);
+    }
+}
+
+void Group::init_mesh() {
     for(int i=0; i< this->facesVec.size(); i++) {
         // 为每个face新建一个mesh, mesh.draw
         std::vector<std::vector<float> > drawdata = facesVec[i].out_to_open_gl();
@@ -145,6 +160,7 @@ void Group::draw(Shader useshader) {
         }
         // 创造Mesh
         Mesh faceMesh = Mesh(data, ind);
-        faceMesh.Draw(useshader);
+        this->MeshsVec.push_back(faceMesh);
     }
+    if_mesh = true;
 }

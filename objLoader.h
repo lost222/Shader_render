@@ -8,28 +8,7 @@
 
 
 
-class Face {
-public:
-    std::vector<std::vector<float> > piontsVec;
-    std::vector<int> seq;
-    std::vector<std::vector<float> > out_to_open_gl();
-};
 
-class Group {
-public:
-    std::vector<Face> facesVec;
-    std::string groupName;
-    void draw(Shader useshader);
-};
-
-
-
-class objLoader {
-    std::vector<Group> groups;
-    Group *cur_group;
-public:
-    void read_obj(const char* Path);
-};
 
 
 std::vector<std::vector<float> > split2triangle (std::vector<std::vector<float> > polygon);
@@ -118,5 +97,32 @@ private:
     }
 };
 
+class Face {
+public:
+    std::vector<std::vector<float> > piontsVec;
+    std::vector<int> seq;
+    std::vector<std::vector<float> > out_to_open_gl();
+};
+
+class Group {
+    bool if_mesh;
+public:
+    Group(){if_mesh = false;}
+    std::vector<Face> facesVec;
+    std::string groupName;
+    std::vector<Mesh> MeshsVec;
+    void init_mesh();
+    void draw(Shader useshader);
+};
+
+
+
+class objLoader {
+    std::vector<Group> groups;
+    Group *cur_group;
+public:
+    void read_obj(const char* Path);
+    void Draw(Shader );
+};
 
 #endif //TEST_GLFW_OBJLOADER_H
