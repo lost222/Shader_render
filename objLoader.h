@@ -110,8 +110,10 @@ public:
     Group(){if_mesh = false;}
     std::vector<Face> facesVec;
     std::string groupName;
+    std::string materialName;
     std::vector<Mesh> MeshsVec;
     void init_mesh();
+    void set_material(Shader , std::vector<float>);
     void draw(Shader useshader);
 };
 
@@ -122,7 +124,7 @@ class objLoader {
     Group *cur_group;
 public:
     void read_obj(const char* Path);
-    void Draw(Shader );
+    void Draw(Shader);
 };
 
 #endif //TEST_GLFW_OBJLOADER_H

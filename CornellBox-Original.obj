@@ -39,6 +39,7 @@ v  -1.02  1.99  -1.04
 
 usemtl backWall
 f -4 -3 -2 -1
+material chrome
 g backWall
 
 ## Object rightwall 
@@ -49,6 +50,7 @@ v	1.00  1.99  -1.04
 
 usemtl rightWall
 f -4 -3 -2 -1
+material chrome
 g rightWall
 
 ## Object leftWall   
@@ -97,8 +99,8 @@ v	0.13  0.00   0.00
 v	0.13  0.60   0.00
 v	0.70  0.60   0.17
 v	0.70  0.00   0.17
-f -4 -3 -2 -1 
-
+f -4 -3 -2 -1
+material ruby
 g shortBox
 usemtl shortBox
 
@@ -139,7 +141,7 @@ v	 0.04  1.20  -0.09
 v	-0.53  1.20   0.09
 v	-0.53  0.00   0.09
 f -4 -3 -2 -1
-
+material gold
 g tallBox
 usemtl tallBox
 

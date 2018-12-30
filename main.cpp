@@ -34,7 +34,7 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
 // lighting
-glm::vec3 lightPos(1.2f, 2.0f, 2.0f);
+glm::vec3 lightPos(0.53,  0.60,   0.75 );
 
 int main()
 {
@@ -93,7 +93,7 @@ int main()
 
     // render loop
     // -----------
-    glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+
     while (!glfwWindowShouldClose(window))
     {
         // per-frame time logic
@@ -116,20 +116,11 @@ int main()
 
         // don't forget to enable shader before setting uniforms
         lightingShader.use();
-
-        glm::vec3 lightColor(1.0f,1.0f,1.0f);
-        glm::vec3 diffuseColor = lightColor   * glm::vec3(0.5f); // decrease the influence
-        glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); // low influence
-        lightingShader.setVec3("light.ambient", ambientColor);
-        lightingShader.setVec3("light.diffuse", diffuseColor);
-        lightingShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+//        glm::vec3 lightPos(0.53,  0.60,   0.75 );
+//        lightPos.x = -0.53f + glfwGetTime() * 0.2f;
+//        lightPos.z = lightPos.z + glfwGetTime() * 0.01f;
+//        lightPos.z = -1.01f + glfwGetTime() * 0.01f;
         lightingShader.setVec3("light.position", lightPos);
-
-        // material properties
-        lightingShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
-        lightingShader.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
-        lightingShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f); // specular lighting doesn't have full effect on this object's material
-        lightingShader.setFloat("material.shininess", 32.0f);
 
 
         // view/projection transformations
