@@ -12,3 +12,11 @@
 - 渲染展示.mp4
 
 其中,纹理对纹理功能单独做了展示, 渲染展示展示了整个从`.obj`文件读取, 指定材质, 到最后基于`phong`渲染的结果. 
+
+
+## 效果展示：
+综合效果
+![image1](https://github.com/lost222/Shader_render/raw/master/img/all.jpg)
+
+BRDF材质： silver 材质高光展示
+![silver](https://github.com/lost222/Shader_render/raw/master/img/silver.jpg)
