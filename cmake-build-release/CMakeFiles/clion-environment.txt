@@ -1,4 +1,4 @@
-ToolSet: 5.0@D:\MinGW
+ToolSet: 5.2 (local)@D:\jetbrains\MinGW
 Options: 
 
 Options:
