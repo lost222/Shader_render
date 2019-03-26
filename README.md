@@ -16,7 +16,7 @@
 
 ## 效果展示：
 综合效果
-![image1](https://github.com/lost222/Shader_render/raw/master/img/all.jpg)
+![image1](https://github.com/lost222/Shader_render/raw/master/img/all.png)
 
 BRDF材质： silver 材质高光展示
-![silver](https://github.com/lost222/Shader_render/raw/master/img/silver.jpg)
+![silver](https://github.com/lost222/Shader_render/raw/master/img/silver.png)
